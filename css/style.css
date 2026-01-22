@@ -1,9 +1,9 @@
 :root {
-  --bg: #0b0b0d;
-  --panel: #141417;
+  --bg: #0a0a0c;
+  --panel: #141418;
   --red: #e10600;
   --text: #eaeaea;
-  --muted: #999;
+  --muted: #9a9a9a;
 }
 
 * {
@@ -15,7 +15,6 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  overflow-x: hidden;
 }
 
 #bg {
@@ -28,13 +27,13 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 14px 24px;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.65);
   backdrop-filter: blur(6px);
 }
 
 .brand {
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
 
 .container {
@@ -45,11 +44,17 @@ body {
 
 .info-panel {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   background: var(--panel);
-  padding: 15px;
+  padding: 16px;
   border-radius: 10px;
   font-size: 14px;
+}
+
+.info-panel div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .info-panel span:first-child {
@@ -58,28 +63,31 @@ body {
 
 .speed-panel {
   display: flex;
-  gap: 40px;
   justify-content: center;
-  margin: 50px 0;
+  margin: 50px 0 30px;
 }
 
-.meter {
+.gauge {
+  background: radial-gradient(circle at center, #1b1b1f, #0d0d10);
+  padding: 30px 40px;
+  border-radius: 16px;
   text-align: center;
 }
 
-.meter .label {
-  color: var(--muted);
-  letter-spacing: 1px;
+.speed-readout {
+  margin-top: -20px;
 }
 
-.meter .speed {
-  font-size: 64px;
+.speed-readout #speedValue {
+  font-size: 56px;
   font-weight: 600;
   color: var(--red);
 }
 
-.unit {
+.mode {
+  margin-top: 8px;
   color: var(--muted);
+  letter-spacing: 1px;
 }
 
 .action-panel {
@@ -92,9 +100,9 @@ body {
   background: var(--red);
   border: none;
   color: white;
-  padding: 14px 30px;
+  padding: 14px 34px;
   font-size: 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -102,7 +110,9 @@ body {
   opacity: 0.9;
 }
 
-.secondary-btn, #toggleBg, #ipToggle {
+.secondary-btn,
+#toggleBg,
+#ipToggle {
   background: none;
   border: 1px solid #333;
   color: var(--text);
@@ -118,7 +128,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  .speed-panel {
+  .info-panel {
     flex-direction: column;
   }
 }
