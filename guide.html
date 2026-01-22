@@ -1,32 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Streaming Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header class="top-bar">
-  <a href="index.html" class="secondary-btn">← Back</a>
+<header class="topbar">
+  <a href="index.html" class="nav-btn">← Back</a>
+  <div class="logo">Streaming Guide</div>
 </header>
 
-<div class="container">
-  <h2>Streaming Upload Guidelines</h2>
+<main class="wrap">
 
-  <select class="secondary-btn">
-    <option>Twitch</option>
-    <option>YouTube</option>
-    <option>Kick</option>
-    <option>Facebook</option>
-  </select>
+  <section class="guide-box">
+    <h2>Your Latest Test</h2>
+    <p>Download: <b id="gd">—</b> Mbps</p>
+    <p>Upload: <b id="gu">—</b> Mbps</p>
 
-  <div class="info-panel" style="margin-top:20px">
-    <div>Recommended Upload: 4.5 – 6 Mbps</div>
-    <div>Headroom: 30%</div>
-    <div>Keyframe Interval: 2s</div>
-  </div>
-</div>
+    <select id="platform">
+      <option>YouTube</option>
+      <option>Twitch</option>
+      <option>Kick</option>
+    </select>
+
+    <button id="calc">Generate Streaming Settings</button>
+
+    <div class="result" id="result"></div>
+  </section>
+
+</main>
+
+<script>
+const d = localStorage.getItem("down");
+const u = localStorage.getItem("up");
+
+document.getElementById("gd").textContent = d ?? "—";
+document.getElementById("gu").textContent = u ?? "—";
+
+document.getElementById("calc").onclick = () => {
+  if (!u) return;
+
+  const up = Number(u);
+  let res = "720p 30fps";
+
+  if (up > 6) res = "1080p 60fps";
+  else if (up > 4) res = "1080p 30fps";
+  else if (up > 2.5) res = "720p 60fps";
+
+  document.getElementById("result").innerHTML =
+    `<b>Recommended:</b><br>${res}<br>Bitrate: ${Math.floor(up*0.7)} Mbps`;
+};
+</script>
 
 </body>
 </html>
