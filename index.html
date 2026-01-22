@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Network Performance Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<header class="top-bar">
+  <div class="brand">Network Performance</div>
+  <div class="top-actions">
+    <button id="toggleBg">Background: ON</button>
+    <a href="guide.html" class="secondary-btn">Streaming Guide</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="info-panel">
+    <div><span>IP:</span> <span id="ip">Loading…</span> <button id="ipToggle">Hide</button></div>
+    <div><span>ISP:</span> <span id="isp">—</span></div>
+    <div><span>Location:</span> <span id="loc">—</span></div>
+  </section>
+
+  <section class="speed-panel">
+
+    <div class="meter">
+      <div class="label">DOWNLOAD</div>
+      <div class="speed" id="download">0.00</div>
+      <div class="unit">Mbps</div>
+    </div>
+
+    <div class="meter">
+      <div class="label">UPLOAD</div>
+      <div class="speed" id="upload">0.00</div>
+      <div class="unit">Mbps</div>
+    </div>
+
+  </section>
+
+  <section class="action-panel">
+    <button id="startTest" class="primary-btn">Start Test</button>
+    <div class="metrics">
+      <div>Ping: <span id="ping">—</span> ms</div>
+      <div>Jitter: <span id="jitter">—</span> ms</div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/particles.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
