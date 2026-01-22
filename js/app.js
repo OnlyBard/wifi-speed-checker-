@@ -1,134 +1,87 @@
-/* ======================
-   IP INFO (SAFE)
-====================== */
-
-const ipEl = document.getElementById("ip");
-const ispEl = document.getElementById("isp");
-const locEl = document.getElementById("loc");
-let fullIP = "";
-let ipHidden = true;
+/* IP INFO */
+let fullIP="", hidden=true;
+const ipEl=document.getElementById("ip");
 
 fetch("https://ipapi.co/json/")
-  .then(r => r.json())
-  .then(d => {
-    fullIP = d.ip || "";
-    ispEl.textContent = d.org || "—";
-    locEl.textContent = `${d.city || ""}, ${d.country || ""}`;
-  });
+.then(r=>r.json())
+.then(d=>{
+  fullIP=d.ip;
+  document.getElementById("isp").textContent=d.org;
+  document.getElementById("loc").textContent=d.city+", "+d.country;
+});
 
-document.getElementById("ipToggle").onclick = () => {
-  ipHidden = !ipHidden;
-  ipEl.textContent = ipHidden ? "Hidden" : fullIP;
-  document.getElementById("ipToggle").innerText =
-    ipHidden ? "Show" : "Hide";
+document.getElementById("ipBtn").onclick=()=>{
+  hidden=!hidden;
+  ipEl.textContent=hidden?"Hidden":fullIP;
 };
 
-/* ======================
-   SPEEDOMETER
-====================== */
+/* SPEEDOMETER */
+const c=document.getElementById("meter");
+const ctx=c.getContext("2d");
 
-const canvas = document.getElementById("speedometer");
-const ctx = canvas.getContext("2d");
+function drawNeedle(val){
+  ctx.clearRect(0,0,c.width,c.height);
+  const cx=c.width/2, cy=c.height-10, r=140;
 
-function drawGauge(value, max = 100) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height;
-  const radius = 110;
-
-  ctx.lineWidth = 10;
-  ctx.strokeStyle = "#222";
+  ctx.strokeStyle="#222";
+  ctx.lineWidth=10;
   ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, Math.PI, 0);
+  ctx.arc(cx,cy,r,Math.PI,0);
   ctx.stroke();
 
-  const angle = Math.PI + (value / max) * Math.PI;
-  ctx.strokeStyle = "#e10600";
+  const a=Math.PI+(val/100)*Math.PI;
+  ctx.strokeStyle="#e10600";
   ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, Math.PI, angle);
+  ctx.arc(cx,cy,r,Math.PI,a);
   ctx.stroke();
 }
 
-/* ======================
-   SPEED TEST LOGIC
-====================== */
+const live=document.getElementById("liveSpeed");
+const phase=document.getElementById("phase");
 
-const speedText = document.getElementById("speedValue");
-const modeText = document.getElementById("mode");
-
-async function testDownload() {
-  modeText.textContent = "DOWNLOAD";
-  let samples = [];
-
-  for (let i = 0; i < 3; i++) {
-    const start = performance.now();
-    await fetch("https://speed.cloudflare.com/__down?bytes=15000000", {
-      cache: "no-store"
+async function test(type){
+  let speeds=[];
+  for(let i=0;i<5;i++){
+    const size = type==="down"?20:10;
+    const start=performance.now();
+    await fetch(`https://speed.cloudflare.com/__${type}?bytes=${size*1024*1024}`,{
+      method:type==="up"?"POST":"GET",
+      body:type==="up"?new Uint8Array(size*1024*1024):null,
+      cache:"no-store"
     });
-    const time = (performance.now() - start) / 1000;
-    const speed = (120 / time); // Mbps approx
-    samples.push(speed);
+    const t=(performance.now()-start)/1000;
+    speeds.push((size*8)/t);
   }
-
-  return average(samples);
+  return speeds.reduce((a,b)=>a+b)/speeds.length;
 }
 
-async function testUpload() {
-  modeText.textContent = "UPLOAD";
-  let samples = [];
-  const data = new Uint8Array(10 * 1024 * 1024);
-
-  for (let i = 0; i < 3; i++) {
-    const start = performance.now();
-    await fetch("https://speed.cloudflare.com/__up", {
-      method: "POST",
-      body: data
-    });
-    const time = (performance.now() - start) / 1000;
-    const speed = (80 / time);
-    samples.push(speed);
-  }
-
-  return average(samples);
+function animate(target){
+  let v=0;
+  const i=setInterval(()=>{
+    v+=target/40;
+    live.textContent=v.toFixed(1);
+    drawNeedle(Math.min(v,100));
+    if(v>=target) clearInterval(i);
+  },25);
 }
 
-function average(arr) {
-  return arr.reduce((a, b) => a + b, 0) / arr.length;
-}
+document.getElementById("start").onclick=async()=>{
+  document.getElementById("final").classList.add("hidden");
 
-async function measurePing() {
-  let times = [];
-  for (let i = 0; i < 5; i++) {
-    const s = performance.now();
-    await fetch("https://www.cloudflare.com/cdn-cgi/trace", { cache: "no-store" });
-    times.push(performance.now() - s);
-  }
-  document.getElementById("ping").textContent =
-    Math.round(average(times));
-  document.getElementById("jitter").textContent =
-    Math.round(Math.max(...times) - Math.min(...times));
-}
+  phase.textContent="Download";
+  const d=await test("down");
+  animate(d);
 
-document.getElementById("startTest").onclick = async () => {
-  speedText.textContent = "0.0";
-  drawGauge(0);
+  phase.textContent="Upload";
+  const u=await test("up");
+  animate(u);
 
-  const down = await testDownload();
-  animateSpeed(down);
+  localStorage.setItem("down",d.toFixed(1));
+  localStorage.setItem("up",u.toFixed(1));
 
-  const up = await testUpload();
-  animateSpeed(up);
+  document.getElementById("finalDown").textContent=d.toFixed(1);
+  document.getElementById("finalUp").textContent=u.toFixed(1);
+  document.getElementById("final").classList.remove("hidden");
 
-  measurePing();
+  phase.textContent="Complete";
 };
-
-function animateSpeed(target) {
-  let current = 0;
-  const interval = setInterval(() => {
-    current += target / 40;
-    speedText.textContent = current.toFixed(1);
-    drawGauge(Math.min(current, 100));
-    if (current >= target) clearInterval(interval);
-  }, 25);
-}
