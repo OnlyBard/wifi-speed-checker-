@@ -1,57 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Network Performance</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <title>Network Performance Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<canvas id="bg"></canvas>
+<div class="bg"></div>
 
-<header class="top-bar">
-  <div class="brand">Network Performance</div>
-  <div class="top-actions">
-    <button id="toggleBg">Background: ON</button>
-    <a href="guide.html" class="secondary-btn">Streaming Guide</a>
-  </div>
+<header class="topbar">
+  <div class="logo">Network Performance</div>
+  <a href="guide.html" class="nav-btn">Streaming Guide</a>
 </header>
 
-<main class="container">
+<main class="wrap">
 
-  <section class="info-panel">
+  <section class="info">
+    <div><span>IP</span><b id="ip">Hidden</b><button id="ipBtn">Show</button></div>
+    <div><span>ISP</span><b id="isp">—</b></div>
+    <div><span>Location</span><b id="loc">—</b></div>
+  </section>
+
+  <section class="meter-box">
+    <canvas id="meter" width="360" height="220"></canvas>
+
+    <div class="live-read">
+      <div id="liveSpeed">0.0</div>
+      <span>Mbps</span>
+      <small id="phase">Idle</small>
+    </div>
+  </section>
+
+  <section class="controls">
+    <button id="start">Start Test</button>
+  </section>
+
+  <section class="final hidden" id="final">
     <div>
-      <span>IP</span>
-      <span id="ip">Hidden</span>
-      <button id="ipToggle">Show</button>
+      <h3>DOWNLOAD</h3>
+      <p id="finalDown">0</p><span>Mbps</span>
     </div>
-    <div><span>ISP</span><span id="isp">—</span></div>
-    <div><span>Location</span><span id="loc">—</span></div>
-  </section>
-
-  <section class="speed-panel">
-    <div class="gauge">
-      <canvas id="speedometer" width="260" height="160"></canvas>
-      <div class="speed-readout">
-        <div id="speedValue">0.0</div>
-        <span>Mbps</span>
-      </div>
-      <div class="mode" id="mode">DOWNLOAD</div>
-    </div>
-  </section>
-
-  <section class="action-panel">
-    <button id="startTest" class="primary-btn">Start Test</button>
-    <div class="metrics">
-      <div>Ping <span id="ping">—</span> ms</div>
-      <div>Jitter <span id="jitter">—</span> ms</div>
+    <div>
+      <h3>UPLOAD</h3>
+      <p id="finalUp">0</p><span>Mbps</span>
     </div>
   </section>
 
 </main>
 
-<script src="js/particles.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
