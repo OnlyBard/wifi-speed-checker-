@@ -1,54 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Network Performance Test</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STREAM-READY // Network Diagnostics</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="dark-theme">
+    <nav class="navbar">
+        <div class="logo">STREAM<span>READY</span></div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Speed Test</a>
+            <a href="guide.html">Streaming Guide</a>
+        </div>
+    </nav>
 
-<div class="bg"></div>
+    <main class="container">
+        <section class="test-wrapper">
+            <div class="header-block">
+                <h1>Network <span class="text-red">Diagnostics</span></h1>
+                <p class="subtitle">Execute the test below. Once finished, input results to generate your profile.</p>
+            </div>
 
-<header class="topbar">
-  <div class="logo">Network Performance</div>
-  <a href="guide.html" class="nav-btn">Streaming Guide</a>
-</header>
+            <div class="iframe-container">
+                <iframe src="https://openspeedtest.com/Get-Widget" frameborder="0"></iframe>
+            </div>
 
-<main class="wrap">
+            <div class="results-sync">
+                <div class="input-group">
+                    <label>Download (Mbps)</label>
+                    <input type="number" id="dl-input" placeholder="0.00" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Upload (Mbps)</label>
+                    <input type="number" id="ul-input" placeholder="0.00" step="0.1">
+                </div>
+                <button id="save-results" class="btn-primary">Sync Results</button>
+            </div>
+        </section>
 
-  <section class="info">
-    <div><span>IP</span><b id="ip">Hidden</b><button id="ipBtn">Show</button></div>
-    <div><span>ISP</span><b id="isp">—</b></div>
-    <div><span>Location</span><b id="loc">—</b></div>
-  </section>
+        <aside class="info-sidebar">
+            <div class="card info-card">
+                <h3>Session Metadata</h3>
+                <div class="meta-row">
+                    <span>Provider:</span>
+                    <span id="isp-val" class="val">Detecting...</span>
+                </div>
+                <div class="meta-row">
+                    <span>Node:</span>
+                    <span id="loc-val" class="val">Scanning...</span>
+                </div>
+                <div class="meta-row">
+                    <span>IP Address:</span>
+                    <div class="ip-container">
+                        <span id="ip-val" class="val hidden">***.***.***.***</span>
+                        <button id="toggle-ip" class="btn-ghost">Show</button>
+                    </div>
+                </div>
+            </div>
+            <div class="status-msg" id="status-msg">
+                Ready for diagnostic run.
+            </div>
+        </aside>
+    </main>
 
-  <section class="meter-box">
-    <canvas id="meter" width="360" height="220"></canvas>
-    <div class="live-read">
-      <div id="liveSpeed">0.0</div><span> Mbps</span>
-      <small id="phase">Idle</small>
-    </div>
-  </section>
-
-  <section class="controls">
-    <button id="start">Start Test</button>
-  </section>
-
-  <section class="final hidden" id="final">
-    <div>
-      <h3>DOWNLOAD</h3>
-      <p id="finalDown">0</p><span> Mbps</span>
-    </div>
-    <div>
-      <h3>UPLOAD</h3>
-      <p id="finalUp">0</p><span> Mbps</span>
-    </div>
-  </section>
-
-</main>
-
-<script src="js/speedtest.js"></script>
-<script src="js/app.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
