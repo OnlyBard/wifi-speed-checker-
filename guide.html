@@ -1,59 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Streaming Guide</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Config // Recommendations</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="dark-theme">
+    <nav class="navbar">
+        <div class="logo">STREAM<span>READY</span></div>
+        <div class="nav-links">
+            <a href="index.html">Speed Test</a>
+            <a href="guide.html" class="active">Streaming Guide</a>
+        </div>
+    </nav>
 
-<header class="topbar">
-  <a href="index.html" class="nav-btn">← Back</a>
-  <div class="logo">Streaming Guide</div>
-</header>
+    <main class="container">
+        <div class="guide-header">
+            <a href="index.html" class="btn-back">← Back to Test</a>
+            <h2>Streaming <span class="text-red">Configuration</span></h2>
+        </div>
 
-<main class="wrap">
+        <section class="config-grid">
+            <div class="card selection-card">
+                <h3>1. Data Source</h3>
+                <div id="latest-stats" class="stats-display">
+                    <p>No test data found.</p>
+                </div>
+                <button id="load-last-test" class="btn-secondary">Use Latest Test Results</button>
 
-  <section class="guide-box">
-    <h2>Your Latest Test</h2>
-    <p>Download: <b id="gd">—</b> Mbps</p>
-    <p>Upload: <b id="gu">—</b> Mbps</p>
+                <hr class="divider">
 
-    <select id="platform">
-      <option>YouTube</option>
-      <option>Twitch</option>
-      <option>Kick</option>
-    </select>
+                <h3>2. Target Platform</h3>
+                <select id="platform-select" class="custom-select">
+                    <option value="twitch">Twitch</option>
+                    <option value="youtube">YouTube (RTMP)</option>
+                    <option value="kick">Kick</option>
+                </select>
+            </div>
 
-    <button id="calc">Generate Streaming Settings</button>
+            <div class="card result-card">
+                <h3>Recommended Encoder Settings</h3>
+                <div id="recommendation-output" class="output-placeholder">
+                    Input speed data to generate report.
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <div class="result" id="result"></div>
-  </section>
-
-</main>
-
-<script>
-const d = localStorage.getItem("down");
-const u = localStorage.getItem("up");
-
-document.getElementById("gd").textContent = d ?? "—";
-document.getElementById("gu").textContent = u ?? "—";
-
-document.getElementById("calc").onclick = () => {
-  if (!u) return;
-
-  const up = Number(u);
-  let res = "720p 30fps";
-
-  if (up > 6) res = "1080p 60fps";
-  else if (up > 4) res = "1080p 30fps";
-  else if (up > 2.5) res = "720p 60fps";
-
-  document.getElementById("result").innerHTML =
-    `<b>Recommended:</b><br>${res}<br>Bitrate: ${Math.floor(up*0.7)} Mbps`;
-};
-</script>
-
+    <script src="js/app.js"></script>
 </body>
 </html>
